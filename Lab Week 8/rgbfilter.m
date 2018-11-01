@@ -8,11 +8,22 @@ subplot(2,2,2); imshow(R); title("Red Channel");
 subplot(2,2,3); imshow(G); title("Green Channel");
 subplot(2,2,4); imshow(B); title("Blue Channel");
 
+%Modify The Channels
+R = zeros(size(R));
+G = G / 2;
+
+figure
+l = cat(3, R,G,B);
+subplot(2,2,1); imshow(l); title("Combined Image");
+subplot(2,2,2); imshow(R); title("Red Channel Value 0");
+subplot(2,2,3); imshow(G); title("Halved Green Channel");
+subplot(2,2,4); imshow(B); title("Blue Channel");
+
 load('ycbcr.mat'); %obtains h and ycbcr
 Y = ycbcr(:,:,1);
 Cb = ycbcr(:,:,2);
 Cr = ycbcr(:,:,3);
-Y = filter2(h, Y);
+newY = filter2(h, Y);
 
 [r, c] = size(Y);
 Rn = zeros(r,c);
@@ -20,9 +31,9 @@ Gn = zeros(r,c);
 Bn = zeros(r,c);
 for i=1:r
   for j=1:c
-    Rn(i,j) = Y(i, j) + 1.4025*(Cr(i, j)-128);
-    Gn(i,j) = Y(i, j) - 0.3443*(Cb(i, j)-128)-0.7144 * (Cr(i, j)-128);
-    Bn(i,j) = Y(i, j) + 1.7730*(Cb(i, j)-128);
+    Rn(i,j) = newY(i, j) + 1.4025*(Cr(i, j)-128);
+    Gn(i,j) = newY(i, j) - 0.3443*(Cb(i, j)-128)-0.7144 * (Cr(i, j)-128);
+    Bn(i,j) = newY(i, j) + 1.7730*(Cb(i, j)-128);
   end
 end
 
